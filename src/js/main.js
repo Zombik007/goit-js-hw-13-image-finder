@@ -80,9 +80,10 @@ function removeloaderEllipsClass() {
 }
 
 function setImageLightbox(e) {
-  const imageDataAttribute = {
-    imageAttribute: e.target.dataset,
-  };
+  const imageDataAttribute = e.target.dataset;
+  if (e.target.dataset.src === undefined) {
+    return;
+  }
   const instance = basicLightbox.create(imageLightboxTpl(imageDataAttribute));
   instance.show();
 }
