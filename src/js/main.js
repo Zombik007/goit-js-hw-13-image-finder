@@ -9,7 +9,6 @@ const refs = {
   searchFormInput: document.querySelector('.js-input-image-query'),
   imagesRenderCard: document.querySelector('.gallery'),
   loaderEllips: document.querySelector('.loader-ellips'),
-  // imageClickItem: document.querySelector('.gallery-item'),
 };
 
 const imageApiService = new ImagesApiService();
@@ -25,7 +24,6 @@ const onEntry = entries => {
         })
         .catch(onFetchError);
       removeloaderEllipsClass();
-      console.log('need to load more image');
     }
   });
 };
@@ -37,14 +35,12 @@ const observer = new IntersectionObserver(onEntry, option);
 
 observer.observe(refs.loaderEllips);
 
-let imageClick;
-
 refs.searchFormInput.addEventListener('input', debounce(onSearch, 500));
 refs.imagesRenderCard.addEventListener('click', setImageLightbox);
 
 function onSearch(e) {
   e.preventDefault();
-  refs.imagesRenderCard.innerHTML = '';
+  clearImagesContainer(); //Для очистки соджержимого если инпут пустой
   imageApiService.query = e.target.value;
   if (e.target.value === '') {
     return;
@@ -56,18 +52,13 @@ function onSearch(e) {
       clearImagesContainer();
       addloaderEllipsClass();
       renderImages(images);
-      // let imageClickItem = document.querySelectorAll('.gallery-item');
-      console.log(images);
     })
     .catch(onFetchError);
   removeloaderEllipsClass();
 }
 
-console.log(imageClick);
-
 function renderImages(images) {
   refs.imagesRenderCard.insertAdjacentHTML('beforeend', imageCardTpl(images));
-  console.log(images);
 }
 
 function onFetchError(err) {
